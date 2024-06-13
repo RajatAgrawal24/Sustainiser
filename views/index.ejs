@@ -1,5 +1,38 @@
 <%-include('./header.ejs')%>
 
+<!-- ***** Welcome Area Start ***** -->
+<div class="welcome-area" id="welcome">
+
+    <!-- ***** Header Text Start ***** -->
+    <div class="header-text">
+        <div class="container">
+            <div class="row">
+                <div class="left-text col-lg-6 col-md-12 col-sm-12 col-xs-12"
+                    data-scroll-reveal="enter left move 30px over 0.6s after 0.4s">
+                    <% if( typeof message !== 'undefined' && message.length > 0){ %>
+                        <div class="alert alert-success">
+                            <!-- To Print -->
+                            <%= message %>
+                        </div>
+                        <% } %>
+                        <% if(typeof msg !== 'undefined' && msg.length > 0){ %>
+                            <div class="alert alert-danger">
+                                <!-- To Print -->
+                                <%= msg %>
+                            </div>
+                        <% } %>
+                    <h1>Empower your path to a  <em>GREENER</em> Future</h1>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi excepturi ab similique expedita doloribus aut vero obcaecati quis non explicabo accusamus adipisci perferendis, consectetur culpa vel, nihil, ex autem officiis?</p> 
+                    <a href="/#about" class="main-button-slider">KNOW US BETTER</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ***** Header Text End ***** -->
+     
+</div>
+<!-- ***** Welcome Area End ***** -->
+
 <!-- ***** Features Big Item Start ***** -->
 <section class="section" id="about">
     <div class="container">
@@ -9,7 +42,7 @@
                 <div class="features-item">
                     <div class="features-icon">
                         <h2>01</h2>
-                        <img src="/images/features-icon-1.png" alt="">
+                        <img src="/images/features-icon-2.png" alt="">
                         <h4>Personalised reports</h4>
                         <p>Curabitur pulvinar vel odio sed sagittis. Nam maximus ex diam, nec consectetur diam.</p>
                         <a href="#testimonials" class="main-button">
@@ -51,6 +84,18 @@
 </section>
 <!-- ***** Features Big Item End ***** -->
 
+<div class="container calendar-background">
+    <div class="container">
+        <h1 class="text-center my-4">Event Calendar</h1>
+        <div id="month-name" class="text-center mb-4"></div>
+        <div id="calendar" class="calendar-row row justify-content-center"></div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="js/eventCalendar.js"></script>
+</div>
+
 <div class="left-image-decor"></div>
 
 <!-- ***** Features Big Item Start ***** -->
@@ -59,7 +104,7 @@
         <div class="row">
             <div class="left-image col-lg-5 col-md-12 col-sm-12 mobile-bottom-fix-big"
                 data-scroll-reveal="enter left move 30px over 0.6s after 0.4s">
-                <img src="/images/left-image.png" class="rounded img-fluid d-block mx-auto" alt="App">
+                <img src="/images/img2.png" class="rounded img-fluid d-block mx-auto" alt="App">
             </div>
             <div class="right-text offset-lg-1 col-lg-6 col-md-12 col-sm-12 mobile-bottom-fix">
                 <ul>

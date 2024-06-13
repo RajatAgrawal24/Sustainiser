@@ -3,11 +3,11 @@ const UserModel = require('../models/user')
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-const cloudinary = require("cloudinary").v2
-cloudinary.config({ 
-  cloud_name: 'dmtgrirpq', 
-  api_key: '755746793887993', 
-  api_secret: 'bOhK96pOw-iGkZpa2lJTnmh0qwY' 
+const cloudinary = require('cloudinary').v2
+cloudinary.config({
+  cloud_name: 'dmhs50pdp', 
+  api_key: '211654577373189', 
+  api_secret: 'niITexNrWo1TrPkyJeVpK6wTUJU' 
 });
 
 class FrontController {
@@ -28,6 +28,21 @@ class FrontController {
             console.log(err);
         }
     }
+    
+    // Challenge section
+    static challenge= async (req,res)=>{
+        try{
+           const top= await UserModel.find().sort({score:-1,name:1}).limit(10).exec()
+           const bottom=await UserModel.find().sort({score:1,name:1}).limit(1).exec()
+        
+        
+        const LeaderTable= [...top,...bottom];
+           res.render('user/challenge', { LeaderTable });
+        }catch(err){
+            console.log(err,err.message);
+            res.status(500).send('An error occurred while fetching leaderboard data.');
+        }
+    }
 
     //User Dashboard
     static dashboard = async (req, res) => {
@@ -38,6 +53,7 @@ class FrontController {
             console.log(err);
         }
     }
+
     //Policy
     static policy = async (req, res) => {
         try{
@@ -55,7 +71,7 @@ class FrontController {
             if (req.files && req.files.image) {
                 const file = req.files.image;
                 imageUpload = await cloudinary.uploader.upload(file.tempFilePath, {
-                    folder: 'userProfile'
+                    folder: 'sustainiser'
                 });
             }
     
@@ -74,8 +90,8 @@ class FrontController {
                             email: e,
                             password: hashPassword,
                             image: {
-                                public_id: imageUpload ? imageUpload.public_id : 'userProfile/ogjhqekpvgaoknrunb4y',
-                                url: imageUpload ? imageUpload.secure_url : 'https://res.cloudinary.com/dmtgrirpq/image/upload/v1709919759/userProfile/ogjhqekpvgaoknrunb4y.webp'
+                                public_id: imageUpload ? imageUpload.public_id : 'sustainiser/ogjhqekpvgaoknrunb4y',
+                                url: imageUpload ? imageUpload.secure_url : 'https://res.cloudinary.com/dmtgrirpq/image/upload/v1709919759/sustainiser/ogjhqekpvgaoknrunb4y.webp'
                             }
                         });
     
@@ -139,7 +155,7 @@ class FrontController {
                 //new image update
                 const imagefile = req.files.image
                 const imageupload = await cloudinary.uploader.upload(imagefile.tempFilePath, {
-                    folder: 'userProfile'
+                    folder: 'sustainiser'
                 })
                 var data = {
                     name: name,
