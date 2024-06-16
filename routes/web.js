@@ -25,10 +25,14 @@ router.get('/dashboard',checkUserAuth, FrontController.dashboard)
 
 router.post('/userinsert', FrontController.userinsert)
 router.post('/verifyLogin', FrontController.verifyLogin)
+router.get('/verify',FrontController.verify)
 router.post('/updateProfile',checkUserAuth ,FrontController.updateProfile)
 router.post('/changePassword',checkUserAuth ,FrontController.changePassword)
 router.get('/logOut',FrontController.logOut)
 
 router.post('/contactUs',ContactController.contactUs)
+
+router.post('/upload',FrontController.uploadChal)
+router.post('/participate',FrontController.participate)
 
 module.exports = router;
