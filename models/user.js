@@ -32,6 +32,26 @@ const UserSchema = new mongoose.Schema(
             type:Number,
             default:0
         },
+        link:{
+            type:String,
+            Required:true
+        },
+        Daily:{
+            type:Number,
+            default:0
+        },
+        Weekly:{
+            type:Number,
+            default:0
+        },
+        Monthly:{
+            type:Number,
+            default:0
+        },
+        Special:{
+            type:Number,
+            default:0
+        },
         Domain:{
             type:[String]                      // Changed
         },

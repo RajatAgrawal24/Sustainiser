@@ -2,9 +2,9 @@ const UserModel = require('../models/user')
 const axios= require("axios")
 const PolicyModel = require('../models/policy');
 
-const nodemailer = require('nodemailer')
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const nodemailer = require('nodemailer');
 
 const cloudinary = require('cloudinary').v2
 cloudinary.config({
@@ -47,14 +47,24 @@ class FrontController {
     // Challenge section
     static challenge= async (req,res)=>{
         try{
-            const plant= await UserModel.find({Domain:"Plantation"}).sort({score:-1,name:1}).limit(10).exec()
-            const recycle= await UserModel.find({Domain:"Recycling"}).sort({score:-1,name:1}).limit(10).exec()
-            const waste= await UserModel.find({Domain:"Best out of Waste"}).sort({score:-1,name:1}).limit(10).exec()
-            const carbon= await UserModel.find({Domain:"Reducing Carbon Emissions"}).sort({score:-1,name:1}).limit(10).exec()
-            // const data = await UserModel.find()
-            // console.log(plant, recycle, waste, carbon)
-            // console.log(data)
-           res.render('user/challenge',{plant, recycle, waste, carbon});
+
+
+            // Change
+
+           const plant= await UserModel.find({Domain:"Plantation"}).sort({score:-1,name:1}).limit(10).exec()
+           const recycle= await UserModel.find({Domain:"Recycling"}).sort({score:-1,name:1}).limit(10).exec()
+           const waste= await UserModel.find({Domain:"Best out of Waste"}).sort({score:-1,name:1}).limit(10).exec()
+           const carbon= await UserModel.find({Domain:"Reducing Carbon Emissions"}).sort({score:-1,name:1}).limit(10).exec()
+         
+        
+           res.render('user/challenge', {
+            plant,
+            recycle,
+            waste,
+            carbon,
+            message: req.flash('success'),
+            msg: req.flash('error')
+        });
         }catch(err){
             console.log(err,err.message);
             res.status(500).send('An error occurred while fetching leaderboard data.');
@@ -128,10 +138,8 @@ class FrontController {
         }
     }
 
-    //narratives
     static narratives = async (req, res) => {
         try{
-
             res.render('narratives');
         }catch(err){
             console.log(err);
@@ -145,19 +153,17 @@ class FrontController {
             // To upload Image on Cloud if an image is uploaded
             if (req.files && req.files.image) {
                 const file = req.files.image;
-                // console.log(file)
                 imageUpload = await cloudinary.uploader.upload(file.tempFilePath, {
                     folder: 'sustainiser'
                 });
             }
-            // console.log(imageUpload)
     
-            const { n, e, p, cp, Domain } = req.body;
+            const { n, e, p, cp ,Domain } = req.body;
             const user = await UserModel.findOne({ email: e });
     
             if (user) {
                 req.flash('error', 'Email Already Exists.');
-                res.redirect('/login');
+                res.redirect('/register');
             } else {
                 if (n && e && p && cp) {
                     if (p == cp) {
@@ -167,10 +173,10 @@ class FrontController {
                             email: e,
                             password: hashPassword,
                             image: {
-                                public_id: imageUpload ? imageUpload.public_id : 'sustainiser/zyfggqoz5bud2fjxxtsm',
-                                url: imageUpload ? imageUpload.secure_url : 'https://res.cloudinary.com/dmhs50pdp/image/upload/v1718462003/sustainiser/zyfggqoz5bud2fjxxtsm.png'
+                                public_id: imageUpload ? imageUpload.public_id : 'sustainiser/ogjhqekpvgaoknrunb4y',
+                                url: imageUpload ? imageUpload.secure_url : 'https://res.cloudinary.com/dmtgrirpq/image/upload/v1709919759/sustainiser/ogjhqekpvgaoknrunb4y.webp'
                             },
-                            Domain: Domain,
+                            Domain:Domain
                         });
     
                         // To save data
@@ -203,11 +209,11 @@ class FrontController {
     static sendVerifyMail = async (n, e, user_id) => {
         // console.log(name,email,status,comment)
         // connenct with the smtp server
-    
+
         let transporter = await nodemailer.createTransport({
           host: "smtp.gmail.com",
           port: 587,
-    
+
           auth: {
             user: "collablab2243@gmail.com",
             pass: "obdojrysnnojlkyu"
@@ -355,6 +361,82 @@ class FrontController {
             console.log(err);
         }
     }
+
+    static uploadChal =async (req,res)=>
+        {
+            try{
+                const{email,link,points}= req.body;
+                // console.log(req.body)
+                const ifexists=await UserModel.findOne({email})
+
+                if(!ifexists)
+                    {
+                        req.flash('success',"Email doesn't exist!")
+                        // console.log("Email doesn't exist!")
+                        res.redirect('/challenge')
+                    }
+                    if(link.includes("youtube.com"))
+                        {
+                            const newScore= ifexists.score+ points;
+                            const updatedUser=  await UserModel.updateOne({email},{$set:{link:link,score:newScore}})
+                            // console.log(updatedUser)
+                            req.flash('success',`Successfully Submitted , Points Granted :${points}`)
+                            // console.log("Successfully submitted")
+                            res.redirect('/challenge')
+                        
+                        }
+                req.flash('error',"Invalid link format")
+                res.redirect('/challenge')
+            }
+            catch(error){
+                console.log(error)
+                console.log(error.message)
+            }
+        }
+
+        static participate = async(req,res)=>
+            {
+                try{
+                    const{email,Chal}= req.body;
+                    console.log(req.body)
+                    const ifexists=await UserModel.findOne({email})
+    
+                    if(!ifexists){
+                        req.flash('success',"Email doesn't exist!")
+                        res.redirect('/challenge')
+                    } 
+
+                    // console.log(ifexists.CountingP)
+
+                    // Ensure CountingP exists and initialize it if not
+                    // if (!ifexists.CountingP) {
+                    //     ifexists.CountingP = { Daily: 0, Weekly: 0, Monthly: 0, Special: 0 };
+                    // if (!Chal || !['Daily', 'Weekly', 'Monthly', 'Special'].includes(Chal)) {
+                    //     req.flash('error', "Invalid challenge type!");
+                    //     console.log("Invalid challenge type!");
+                    // }
+                    // console.log(Chal)
+                    const number=ifexists.Chal
+                    // console.log(number)
+                    const currentNumber= number+1
+                    // console.log(currentNumber)
+                    const updatedUser=  await UserModel.updateOne({email},{$set:{Chal:currentNumber}})
+                    // console.log(updatedUser)
+                    
+                    // console.log(ifexists)
+
+                    req.flash('success', "Participation Successful! You are enrolled!")
+                    res.redirect('/challenge')
+                }
+            catch(error)
+            {
+                console.log(error)
+                console.log(error.message)
+
+            }
+
+
+}
 }
 
 module.exports = FrontController
